@@ -1,0 +1,116 @@
+---
+title: "Data Memo"
+author: "Olivia Quinn"
+date: "4/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Dataset
+
+### What does it include? 
+
+- Congressional committee assignments for the US House of Representatives, 1993 - 2017
+- Hopefully combined with a set of predictors that I am currently collecting (District characteristics, Member of Congress characteristics)
+
+
+### Where and how will you be obtaining it? Include the link and source.
+
+Outcome: 
+
+Charles Stewart III and Jonathan Woon.  Congressional Committee Assignments, 103rd to 114th Congresses, 1993--2017
+
+Available at: http://web.mit.edu/17.251/www/data_page.html#2
+
+Predictors: 
+
+District Characteristics: US Census Bureau (data they collect via the Ammerican Community Survey and County Business Patterns). The online data search function/data viewer is really awful but I believe I'll be able to extract # of workers in each of a dozen different industry sectors, by Congressional District, going back to ~2012. 
+
+Available at: data.census.gov (but might play around with the "tidycensus" package and pull variables directly that way)
+
+District + Member of Congress characteristics: found a dataset spanning 1972 - 2014 with basic district demos, basic MC demos, and committee assignments(!!!) BUT it doesn't have the granularity I want in terms of industry employment broken down by sector and congressional district. I'd like to merge this in, but the Census data above starts in ~2012. I am looking for other predictor variables over the relevant time period that are able to capture the district-level interests that I'm interested in. 
+
+Available at: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/CI2EPI
+
+
+Another helpful source for how to work with Congressional data in R: http://congressdata.joshuamccrain.com/index.html
+
+### About how many observations? How many predictors? 
+
+Observations for the first dataset are () but that includes one per MC, per year. So 
+
+### What types of variables will you be working with?
+
+Variables are everything from nominal, numerical, binary...
+
+- committee assignments (currently nominal, e.g. Energy and Commerce, but could be dummy coded)
+- congressional district (nominal, e.g. CA-24)
+- district demographics (numerical, e.g. % black)
+- MC name and demographic characteristics (nominal or often binary, for the latter)
+- district-level industry/employment statistics (ordinal, e.g. # of employed per year in Oil/Gas/Mining extraction)
+
+
+### Is there any missing data? About how much? Do you have an idea for how to handle it?
+
+
+
+# Research Question(s)
+
+### What variable(s) are you interested in predicting? What question(s) are you interested in answering?
+
+I'm MOST interested in predicting the committee assignments of newly elected Members of Congress. My own research focuses on climate and energy policymaking in Congress, so which Representatives come to serve on Energy/Environmental committees is very important. To the extent that a member comes to Congress with a certain set of policy goals, or represents a certain type of district, they bring those interests to the committees they serve on. 
+
+Lots of existing research has tested theories of committee placements on existing data, trying to figure out the logic behind these placements. Unfortunately the process of assignment is sort of opaque: new members let party leadership (via steering committees) know which seats they'd prefer, leadership decides which seats are empty/need to be filled, and makes those placements. There is no recent data on committee requests or steering committee votes, etc. This is where I have questions. Which types of districts or new member characteristics correlate with placement on certain committees? Does loyalty (or potential loyalty) to party goals predict a "better" placement on a higher-impact committee? Are there "punishment" committees for potential defectors? AND, does the constellation of energy interests (i.e. fossil fuel jobs/industry) within a district *predict* placement on committees with jurisdiction over these issues? 
+
+### Name your response/outcome variable(s) and briefly describe it/them.
+
+Outcome variable: committee placement
+
+This variable is measured categorically, by the name of the House standing committee that a member serves on. 
+
+### Will these questions be best answered with a classification or regression approach?
+
+Classification 
+
+### Which predictors do you think will be especially useful?
+
+Member Characteristics: e.g. demographic, previous employment, education, + currently looking to see if anyone has estimated ideological measures of newly elected members (before they even cast a vote)
+
+District Characteristics: e.g. size of industry (measured as # of employees per sector), race/income predictors, etc.
+
+### Is the goal of your model descriptive, predictive, inferential, or a combination? Explain.
+
+
+I'd like to end up with a model that can semi-accurately predict the committee placements of both candidates in a House election before that election takes place. For example, if there's a close race between two candidates (or even between primary candidates in less competitive general elections) voters might be able to use this information to their advantage. I'm thinking that Bayes classifiers would be helpful, but I'm not that far in the book to know yet. 
+
+
+# Proposed Project Timeline
+
+### When do you plan on having your data set loaded, beginning your exploratory data analysis, etc?
+
+Ideally by the end of this week! 
+
+### Provide a general timeline for the rest of the quarter.
+
+Week 3: finalize data
+
+Week 4: tidy and merge datasets 
+
+Week 5: choose model type, specify, and train
+
+Week 6: test 
+
+Week 7: troubleshoot inevitable problems 
+
+Week 8 - 10: write up results & report 
+
+## Questions or Concerns
+
+Are there any problems or difficult aspects of the project you anticipate?
+- time series problems? 
+- scope of outcome is such that a committee assignment only follows a committee seat opening? so range of possible outcomes is circumscribed from the get go. 
+
+### Any specific questions you have for me/the instructional team?
