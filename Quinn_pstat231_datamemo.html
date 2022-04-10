@@ -356,83 +356,97 @@ pre code {
 </div>
 
 
-<div id="dataset" class="section level2">
-<h2>Dataset</h2>
+<div id="dataset" class="section level1">
+<h1>Dataset</h1>
 <div id="what-does-it-include" class="section level3">
 <h3>What does it include?</h3>
 <ul>
-<li>Congressional committee assignments, the US House of Representatives, 1993 - 2017</li>
-<li>Bound with a set of predictors that I am currently collecting (District characteristics, Member of Congress characteristics)</li>
+<li>The main dataset includes Congressional committee assignments for the US House of Representatives from 1993 - 2017.</li>
+<li>I hope to combine it with a set of predictors that I am currently collecting (District characteristics, Member of Congress characteristics)</li>
 </ul>
 </div>
 <div id="where-and-how-will-you-be-obtaining-it-include-the-link-and-source." class="section level3">
 <h3>Where and how will you be obtaining it? Include the link and source.</h3>
-<p>Charles Stewart III and Jonathan Woon. Congressional Committee Assignments, 103rd to 114th Congresses, 1993–2017 available at: <a href="http://web.mit.edu/17.251/www/data_page.html#2" class="uri">http://web.mit.edu/17.251/www/data_page.html#2</a></p>
-<p>Predictors</p>
+<p>Outcome:</p>
+<p>Charles Stewart III and Jonathan Woon. Congressional Committee Assignments, 103rd to 114th Congresses, 1993–2017</p>
+<p>Available at: <a href="http://web.mit.edu/17.251/www/data_page.html#2" class="uri">http://web.mit.edu/17.251/www/data_page.html#2</a></p>
+<p>Predictors:</p>
+<p>District Characteristics: US Census Bureau (data they collect via the Ammerican Community Survey and County Business Patterns). The online data search function/data viewer is really awful but I believe I’ll be able to extract # of workers in each of a dozen different industry sectors, by Congressional District, going back to ~2012. If I can’t find another/better source. This would cut my data range to 2012-2017.</p>
+<p>Available at: data.census.gov (but might play around with the “tidycensus” package and pull variables directly that way)</p>
+<p>District + Member of Congress characteristics: found a dataset spanning 1972 - 2014 with basic district demos, basic MC demos, and committee assignments(!!!) BUT it doesn’t have the granularity I want in terms of industry employment broken down by sector and congressional district. I’d like to merge this in, but the Census data above starts in ~2012. I am looking for other predictor variables over the relevant time period that are able to capture the district-level interests that I’m interested in.</p>
+<p>Available at: <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/CI2EPI" class="uri">https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/CI2EPI</a></p>
+<p>Another helpful source I will use for how to work with Congressional data in R: <a href="http://congressdata.joshuamccrain.com/index.html" class="uri">http://congressdata.joshuamccrain.com/index.html</a></p>
 </div>
 <div id="about-how-many-observations-how-many-predictors" class="section level3">
 <h3>About how many observations? How many predictors?</h3>
+<p>First dataset has 11,870 observations. Census industry data has 19 separate economic sectors with employment #s for each sector, for each congressional district, by year. Other datasets I am currently looking for will fill in the other predictors I will need, including election vote share, district racial, income, age, religious demographics etc. I’m additionally looking for measures of previous legislative activity for existing members, e.g. legislative productivity, bills sponsored, interest group scores, etc.</p>
 </div>
 <div id="what-types-of-variables-will-you-be-working-with" class="section level3">
 <h3>What types of variables will you be working with?</h3>
+<p>Variables are everything from nominal, numerical, binary…</p>
 <ul>
-<li>committee assignments</li>
-<li>congressional district</li>
-<li>MC</li>
-<li>district-level industry/employment statistics</li>
-<li>2013-2017??</li>
+<li>committee assignments (currently nominal, e.g. Energy and Commerce, but could be dummy coded)</li>
+<li>congressional district (nominal, e.g. CA-24)</li>
+<li>district demographics (numeric, e.g. % black)</li>
+<li>MC name and demographic characteristics (nominal or often binary, for the latter)</li>
+<li>district-level industry/employment statistics (cumeric, e.g. # of employed per year in Oil/Gas/Mining extraction)</li>
 </ul>
 </div>
 <div id="is-there-any-missing-data-about-how-much-do-you-have-an-idea-for-how-to-handle-it" class="section level3">
 <h3>Is there any missing data? About how much? Do you have an idea for how to handle it?</h3>
+<p>No big issues with missing data besides the fact that each of the data sets I want to merge cover different time periods. I think I will have to find better, more recent data on my outcome (committee assignments) to match the census employment data that begins around 2012.</p>
 </div>
 </div>
 <div id="research-questions" class="section level1">
 <h1>Research Question(s)</h1>
 <div id="what-variables-are-you-interested-in-predicting-what-questions-are-you-interested-in-answering" class="section level3">
 <h3>What variable(s) are you interested in predicting? What question(s) are you interested in answering?</h3>
+<p>I’m MOST interested in predicting the committee assignments of newly elected Members of Congress. My own research focuses on climate and energy policymaking in Congress, so which Representatives come to serve on Energy/Environmental committees is very important. To the extent that a member comes to Congress with a certain set of policy goals, or represents a certain type of district, they bring those interests to the committees they serve on.</p>
+<p>Lots of existing research has tested theories of committee placements on existing data, trying to figure out the logic behind these placements. Unfortunately the process of assignment is sort of opaque: new members let party leadership (via steering committees) know which seats they’d prefer, leadership decides which seats are empty/need to be filled, and makes those placements. There is no recent data on committee requests or steering committee votes, etc. This is where I have questions. Which types of districts or new member characteristics correlate with placement on certain committees? Does loyalty (or potential loyalty) to party goals predict a “better” placement on a higher-impact committee? Are there “punishment” committees for potential defectors? AND, does the constellation of energy interests (i.e. fossil fuel jobs/industry) within a district <em>predict</em> placement on committees with jurisdiction over these issues?</p>
 </div>
 <div id="name-your-responseoutcome-variables-and-briefly-describe-itthem." class="section level3">
 <h3>Name your response/outcome variable(s) and briefly describe it/them.</h3>
-<ul>
-<li>committee</li>
-<li>house standing committees</li>
-</ul>
+<p>Outcome variable: committee placement</p>
+<p>This variable is measured categorically, by the name of the House standing committee that a member serves on.</p>
+<p>The problem here is that a member of Congress’ relationship to a committee during a given session of congress could be coded one of four ways (assigned to committee during first term, continued service on committee, transferred onto committee but not first term in congress, or, not serving on committee.) I need to work on specifying this from existing theory OR learning more about how machine learning can take all of this data in and help me to visualize relationships.</p>
 </div>
 <div id="will-these-questions-be-best-answered-with-a-classification-or-regression-approach" class="section level3">
 <h3>Will these questions be best answered with a classification or regression approach?</h3>
-<ul>
-<li>classification</li>
-</ul>
+<p>Classification (I think bayesian classifiers?)</p>
 </div>
 <div id="which-predictors-do-you-think-will-be-especially-useful" class="section level3">
 <h3>Which predictors do you think will be especially useful?</h3>
-<ul>
-<li>MC characteristics — knowledge, interests, experience</li>
-<li>but also! what i’m interested in which is district characteristics</li>
-</ul>
+<p>New Member Characteristics: e.g. demographic, previous employment, education, + currently looking to see if anyone has estimated ideological measures of newly elected members (before they even cast a vote)</p>
+<p>Incumbent Member Characteristics: same as above + legislative history</p>
+<p>District Characteristics: e.g. size of industry (measured as # of employees per sector), race/income predictors, etc.</p>
 </div>
 <div id="is-the-goal-of-your-model-descriptive-predictive-inferential-or-a-combination-explain." class="section level3">
 <h3>Is the goal of your model descriptive, predictive, inferential, or a combination? Explain.</h3>
-<ul>
-<li>predictive</li>
-<li>bayes classifier</li>
-</ul>
+<p>I’d like to end up with a model that can semi-accurately predict the committee placements of both candidates in a House election before that election takes place. For example, if there’s a close race between two candidates (or even between primary candidates in less competitive general elections) voters might be able to use this information to their advantage. I’m thinking that Bayes classifiers would be helpful, but I’m not that far in the book to know yet.</p>
 </div>
-<div id="your-proposed-project-timeline" class="section level2">
-<h2>Your proposed project timeline</h2>
+</div>
+<div id="proposed-project-timeline" class="section level1">
+<h1>Proposed Project Timeline</h1>
 <div id="when-do-you-plan-on-having-your-data-set-loaded-beginning-your-exploratory-data-analysis-etc" class="section level3">
 <h3>When do you plan on having your data set loaded, beginning your exploratory data analysis, etc?</h3>
+<p>Ideally by the end of this week!</p>
 </div>
 <div id="provide-a-general-timeline-for-the-rest-of-the-quarter." class="section level3">
 <h3>Provide a general timeline for the rest of the quarter.</h3>
+<p>Week 3: finalize data</p>
+<p>Week 4: tidy and merge datasets</p>
+<p>Week 5: choose model type, specify, and train</p>
+<p>Week 6: test</p>
+<p>Week 7: troubleshoot inevitable problems</p>
+<p>Week 8 - 10: write up results &amp; report</p>
 </div>
-</div>
-<div id="any-questions-or-concerns" class="section level2">
-<h2>Any questions or concerns</h2>
-<p>Are there any problems or difficult aspects of the project you anticipate? - time series problems? - scope of outcome is such that a committee assignment only follows a committee seat opening? so range of possible outcomes is circumscribed from the get go.</p>
+<div id="questions-or-concerns" class="section level2">
+<h2>Questions or Concerns</h2>
+<p>Because this data is collected on the same population year after year, is it time series? Are there machine learning models than do this type of prediction?</p>
+<p>Additionally, the scope of my outcome variable is such that a committee assignment only follows a committee seat opening. A member of congress cannot just sit on any committee at any time, there must be “room” for them. Maybe if there is a “transferred to committee” or “continued service on same committee” variable, this would absorb the effect of limited committee size.</p>
 <div id="any-specific-questions-you-have-for-methe-instructional-team" class="section level3">
 <h3>Any specific questions you have for me/the instructional team?</h3>
+<p>Nope! But after this week I may end up simplifying my question/dataset (or changing it altogether) to be a bit more realistic to work with/merge, and I will ask for advice if I hit any snags. Thanks!</p>
 </div>
 </div>
 </div>

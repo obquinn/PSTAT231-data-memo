@@ -13,8 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### What does it include? 
 
-- Congressional committee assignments for the US House of Representatives, 1993 - 2017
-- Hopefully combined with a set of predictors that I am currently collecting (District characteristics, Member of Congress characteristics)
+- The main dataset includes Congressional committee assignments for the US House of Representatives from 1993 - 2017.
+- I hope to combine it with a set of predictors that I am currently collecting (District characteristics, Member of Congress characteristics)
 
 
 ### Where and how will you be obtaining it? Include the link and source.
@@ -27,7 +27,7 @@ Available at: http://web.mit.edu/17.251/www/data_page.html#2
 
 Predictors: 
 
-District Characteristics: US Census Bureau (data they collect via the Ammerican Community Survey and County Business Patterns). The online data search function/data viewer is really awful but I believe I'll be able to extract # of workers in each of a dozen different industry sectors, by Congressional District, going back to ~2012. 
+District Characteristics: US Census Bureau (data they collect via the Ammerican Community Survey and County Business Patterns). The online data search function/data viewer is really awful but I believe I'll be able to extract # of workers in each of a dozen different industry sectors, by Congressional District, going back to ~2012. If I can't find another/better source. This would cut my data range to 2012-2017.
 
 Available at: data.census.gov (but might play around with the "tidycensus" package and pull variables directly that way)
 
@@ -35,12 +35,11 @@ District + Member of Congress characteristics: found a dataset spanning 1972 - 2
 
 Available at: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/CI2EPI
 
-
-Another helpful source for how to work with Congressional data in R: http://congressdata.joshuamccrain.com/index.html
+Another helpful source I will use for how to work with Congressional data in R: http://congressdata.joshuamccrain.com/index.html
 
 ### About how many observations? How many predictors? 
 
-Observations for the first dataset are () but that includes one per MC, per year. So 
+First dataset has 11,870 observations. Census industry data has 19 separate economic sectors with employment #s for each sector, for each congressional district, by year. Other datasets I am currently looking for will fill in the other predictors I will need, including election vote share, district racial, income, age, religious demographics etc. I'm additionally looking for measures of previous legislative activity for existing members, e.g. legislative productivity, bills sponsored, interest group scores, etc. 
 
 ### What types of variables will you be working with?
 
@@ -48,14 +47,14 @@ Variables are everything from nominal, numerical, binary...
 
 - committee assignments (currently nominal, e.g. Energy and Commerce, but could be dummy coded)
 - congressional district (nominal, e.g. CA-24)
-- district demographics (numerical, e.g. % black)
+- district demographics (numeric, e.g. % black)
 - MC name and demographic characteristics (nominal or often binary, for the latter)
-- district-level industry/employment statistics (ordinal, e.g. # of employed per year in Oil/Gas/Mining extraction)
+- district-level industry/employment statistics (cumeric, e.g. # of employed per year in Oil/Gas/Mining extraction)
 
 
 ### Is there any missing data? About how much? Do you have an idea for how to handle it?
 
-
+No big issues with missing data besides the fact that each of the data sets I want to merge cover different time periods. I think I will have to find better, more recent data on my outcome (committee assignments) to match the census employment data that begins around 2012. 
 
 # Research Question(s)
 
@@ -71,18 +70,21 @@ Outcome variable: committee placement
 
 This variable is measured categorically, by the name of the House standing committee that a member serves on. 
 
+The problem here is that a member of Congress' relationship to a committee during a given session of congress could be coded one of four ways (assigned to committee during first term, continued service on committee, transferred onto committee but not first term in congress, or, not serving on committee.) I need to work on specifying this from existing theory OR learning more about how machine learning can take all of this data in and help me to visualize relationships. 
+
 ### Will these questions be best answered with a classification or regression approach?
 
-Classification 
+Classification (I think bayesian classifiers?)
 
 ### Which predictors do you think will be especially useful?
 
-Member Characteristics: e.g. demographic, previous employment, education, + currently looking to see if anyone has estimated ideological measures of newly elected members (before they even cast a vote)
+New Member Characteristics: e.g. demographic, previous employment, education, + currently looking to see if anyone has estimated ideological measures of newly elected members (before they even cast a vote)
+
+Incumbent Member Characteristics: same as above + legislative history
 
 District Characteristics: e.g. size of industry (measured as # of employees per sector), race/income predictors, etc.
 
 ### Is the goal of your model descriptive, predictive, inferential, or a combination? Explain.
-
 
 I'd like to end up with a model that can semi-accurately predict the committee placements of both candidates in a House election before that election takes place. For example, if there's a close race between two candidates (or even between primary candidates in less competitive general elections) voters might be able to use this information to their advantage. I'm thinking that Bayes classifiers would be helpful, but I'm not that far in the book to know yet. 
 
@@ -109,8 +111,10 @@ Week 8 - 10: write up results & report
 
 ## Questions or Concerns
 
-Are there any problems or difficult aspects of the project you anticipate?
-- time series problems? 
-- scope of outcome is such that a committee assignment only follows a committee seat opening? so range of possible outcomes is circumscribed from the get go. 
+Because this data is collected on the same population year after year, is it time series? Are there machine learning models than do this type of prediction? 
+
+Additionally, the scope of my outcome variable is such that a committee assignment only follows a committee seat opening. A member of congress cannot just sit on any committee at any time, there must be "room" for them. Maybe if there is a "transferred to committee" or "continued service on same committee" variable, this would absorb the effect of limited committee size.  
 
 ### Any specific questions you have for me/the instructional team?
+
+Nope! But after this week I may end up simplifying my question/dataset (or changing it altogether) to be a bit more realistic to work with/merge, and I will ask for advice if I hit any snags. Thanks! 
